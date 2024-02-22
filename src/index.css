@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --gray-color-main: rgb(46, 46, 46);
+}
+
+body{
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.b{
+  width: 300px;
+  height: 300px;
+  
+  
+}
+
+.all-buttons{
+  border-radius: 50%;
+  box-shadow: 0px 0px 14px 0px;
+  border: 20px solid var(--gray-color-main);
+  margin: 0;
+  
+}
+
+/*Buttons' radius*/
+.border-r-t{
+  border-top-right-radius: 100%;
+  border-left: 10px solid var(--gray-color-main);
+  border-bottom: 10px solid var(--gray-color-main);
+}
+
+.border-l-t{
+  border-top-left-radius: 100%;
+  border-right: 10px solid var(--gray-color-main);
+  border-bottom: 10px solid var(--gray-color-main);
+}
+.border-l-b{
+  border-bottom-left-radius: 100%;
+  border-top: 10px solid var(--gray-color-main);
+  border-right: 10px solid var(--gray-color-main);
+}
+.border-r-b{
+  border-bottom-right-radius: 100%;
+  border-left: 10px solid var(--gray-color-main);
+  border-top: 10px solid var(--gray-color-main);
+
+}
+
+.white-space-command{
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  background-color: white;
+  border: 20px solid var(--gray-color-main);
+  border-radius: 50%;
+}
+
+
+.start-b{
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: rgb(3, 121, 40);
+  border: 5px solid var(--gray-color-main);
+  box-shadow: 0px 0px 3px 0px;
+}
+
+.start-b:hover, .start-b:focus{
+  background-color: rgb(3, 176, 52);
+}
+
+.start-b:active{
+  transform: scale(90%);
+}
