@@ -82,3 +82,35 @@ body{
 .start-b:active{
   transform: scale(90%);
 }
+.strict-b{
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: rgb(3, 82, 121);
+  border: 5px solid var(--gray-color-main);
+  box-shadow: 0px 0px 3px 0px;
+}
+
+.strict-b:hover, .strict-b:focus{
+  background-color: rgb(7, 120, 176);
+}
+
+.strict-b:active{
+  transform: scale(90%);
+}
+.restart-b{
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: rgb(121, 31, 3);
+  border: 5px solid var(--gray-color-main);
+  box-shadow: 0px 0px 3px 0px;
+}
+
+.restart-b:hover, .restart-b:focus{
+  background-color: rgb(219, 73, 63);
+}
+
+.restart-b:active{
+  transform: scale(90%);
+}
