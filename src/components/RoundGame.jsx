@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 
 const RoundGame = () => {
     // Button clicked 
-    let computerButtons = [3, 3, 1, 2]
-    
-    let playerButtons = []
+    let [computerButtons, setComputerButtons] = useState([1, 2])
+    let [playerButtons, setPlayerButtons] = useState([])
+   
 
     const [start, setStart] = useState(false)
     const [strictMode, setStrictMode] = useState(false)
@@ -17,6 +17,12 @@ const RoundGame = () => {
     const [score, setScore]  = useState(0)
 
     const [roundStop, setRoundStop] = useState(false)
+
+    //Player round
+    const [playerStart, setPlayerStart] = useState(false)
+    //Amount for 1 round
+    const [round, setRound] = useState(0)
+
 
     const handleStart = () => {
         setStart(true)
@@ -53,20 +59,31 @@ const RoundGame = () => {
 
     //Play computer random array
     const playRandom = () => {
-        let round = 0
-        while (round < computerButtons.length){
-            setColorRandom(computerButtons[round]) 
-            playButtons(computerButtons[round])
-            round++
+        if(round < computerButtons.length){
+            
+            setTimeout(() => {
+                setColorRandom(computerButtons[round]) 
+                playButtons(computerButtons[round])
+                setRound(r => r + 1)
+            }, 1000)   
+        }else if(round === computerButtons.length){
+            setTimeout(() => {
+                setColorRandom(0)
+            }, 1000)
+            setPlayerStart(true)
+           
+            setRound(0)
         }
+        
     }
 
     //Start 
-    const startGame = () => {
+    const startRandom = () => {
         let random = generateRandomButtonNumber();
         if(start && !roundStop){
-            computerButtons.push(random)
+            setComputerButtons([...computerButtons, random])
             setRoundStop(true)
+            
             console.log(random)
         }
         
@@ -74,50 +91,60 @@ const RoundGame = () => {
 
     const handleRestart = () => {
         setStart(false)
+        setRoundStop(false)
         setMistake(false)
         setScore(0)
-        computerButtons.length = 0
-        playerButtons.length = 0
+        setRound(0)
+        setComputerButtons([])
+        setPlayerButtons([])
     }
 
     const handlePlayerChoices = (value) => {
-        if(start){
-            playerButtons.push(value)
+        if(start && playerStart){
+            setPlayerButtons([...playerButtons, value])
             playButtons(value)
+            
+        }
+        if(playerButtons.length === computerButtons.length - 1){
+            setRoundStop(false)
+            setPlayerStart(false)
+            setPlayerButtons([])
         }
         
     }
     
     useEffect(() => {
-        startGame()
-        if(roundStop){
+        startRandom()
+        if(roundStop && !playerStart){
             playRandom()
         }
         
         
-        console.log(start)
+        console.log("Start", start)
         console.log(computerButtons)
         console.log(playerButtons)
-        
-    }, [start, strictMode, mistake, roundStop, computerButtons])
+        console.log("Round stop", roundStop)
+        console.log("Round", round)
+        console.log("Player start", playerStart)
+    }, [start, strictMode, mistake, roundStop, computerButtons, round, playerButtons, playerStart])
 
   return (
     <div className="relative all-buttons ">
         <div className=" flex flex-col ">
             <div className="flex">
-                <button onClick={() => handlePlayerChoices(1)} className={`b border-l-t  ${start ? "active:bg-red-400 cursor-pointer" : " cursor-default"} ${colorRandom === 1 ? "bg-red-400": "bg-red-600"}`}>
+                <button onClick={() => handlePlayerChoices(1)} className={`b border-l-t  ${playerStart && start ? "active:bg-red-400 cursor-pointer" : " cursor-default"} ${colorRandom === 1 ? "bg-red-400": "bg-red-600"}`}>
                     <audio id="b1" src="https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"></audio>
                 </button>
-                <button onClick={() => handlePlayerChoices(2)} className={`b border-r-t  ${start ? "active:bg-blue-400 cursor-pointer" : " cursor-default"}  ${colorRandom === 2 ? "bg-blue-400": "bg-blue-600"}`}>
+                <button onClick={() => handlePlayerChoices(2)} className={`b border-r-t  ${playerStart && start ? "active:bg-blue-400 cursor-pointer" : " cursor-default"}  ${colorRandom === 2 ? "bg-blue-400": "bg-blue-600"}`}>
                     <audio id="b2" src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"></audio>
                 </button>
             </div>
            
             <div className="flex">
-                <button onClick={() => handlePlayerChoices(3)} className={`b border-l-b   ${start ? "active:bg-yellow-200 cursor-pointer" : " cursor-default"} ${colorRandom === 3 ? "bg-yellow-400" : "bg-yellow-600"}`}>
+                <button onClick={() => handlePlayerChoices(3)} className={`b border-l-b   ${playerStart && start ? "active:bg-yellow-200 cursor-pointer" : " cursor-default"} ${colorRandom === 3 ? "bg-yellow-400" : "bg-yellow-600"}`}>
                     <audio id="b3" src="https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"></audio>
                 </button>
-                <button onClick={() => handlePlayerChoices(4)} className={`b border-r-b  ${start ? "active:bg-green-400 cursor-pointer" : " cursor-default"} ${colorRandom === 4 ? "bg-green-400" : "bg-green-600"}`}>
+                <button onClick={() => handlePlayerChoices(4)} className={`b border-r-b  ${playerStart && start ? "active:bg-green-400 cursor-pointer" : " cursor-default"} ${colorRandom === 4 ? "bg-green-400" : "bg-green-600"}`}>
                     <audio id="b4" src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"></audio>
                 </button>
             </div>
