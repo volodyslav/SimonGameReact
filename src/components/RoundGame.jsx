@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 const RoundGame = () => {
     // Button clicked 
-    let [computerButtons, setComputerButtons] = useState([1, 2])
+    let [computerButtons, setComputerButtons] = useState([])
     let [playerButtons, setPlayerButtons] = useState([])
    
 
@@ -26,6 +26,8 @@ const RoundGame = () => {
 
     const handleStart = () => {
         setStart(true)
+        setMistake(false)
+        setScore(0)
     }
 
     const handleStrictMode = () => {
@@ -83,8 +85,10 @@ const RoundGame = () => {
         if(start && !roundStop){
             setComputerButtons([...computerButtons, random])
             setRoundStop(true)
+            setTimeout(() => {
+                setMistake(false)
+            }, 2000)
             
-            console.log(random)
         }
         
     }
@@ -92,7 +96,8 @@ const RoundGame = () => {
     const handleRestart = () => {
         setStart(false)
         setRoundStop(false)
-        setMistake(false)
+        setPlayerStart(false)
+        
         setScore(0)
         setRound(0)
         setComputerButtons([])
@@ -106,10 +111,15 @@ const RoundGame = () => {
             
         }
         if(playerButtons.length === computerButtons.length - 1){
-            setRoundStop(false)
-            setPlayerStart(false)
-            setPlayerButtons([])
+            setTimeout(() => {
+                setRoundStop(false)
+                setPlayerStart(false)
+                setPlayerButtons([])
+                
+            }, 100)
+            setScore(s => s + 1)
         }
+        
         
     }
     
@@ -118,15 +128,44 @@ const RoundGame = () => {
         if(roundStop && !playerStart){
             playRandom()
         }
+        if(score === 20){
+            setTimeout(() => {
+                handleRestart()
+            }, 5000)
+            
+        }
+
+        if(!strictMode){
+            for(let i = 0; i < playerButtons.length ; i++){
+                console.log("i",i)
+                if(playerButtons[i] !== computerButtons[i]){
+                    setMistake(true)
+                    setScore(0)
+                    handleRestart()
+                    break
+                }
+            }
+        }else if(strictMode){
+            for(let i = 0; i < playerButtons.length ; i++){
+                console.log("i",i)
+                if(playerButtons[i] !== computerButtons[i]){
+                    setMistake(true)
+                    setPlayerStart(false)
+                    setPlayerButtons([])
+                    setRound(0) 
+                }
+            }
+        }
         
         
-        console.log("Start", start)
+        //console.log("Start", start)
+        //console.log("Mistake", mistake)
         console.log(computerButtons)
         console.log(playerButtons)
-        console.log("Round stop", roundStop)
-        console.log("Round", round)
-        console.log("Player start", playerStart)
-    }, [start, strictMode, mistake, roundStop, computerButtons, round, playerButtons, playerStart])
+        //console.log("Round stop", roundStop)
+        //console.log("Round", round)
+        //console.log("Player start", playerStart)
+    }, [start, strictMode,  roundStop, computerButtons, round, playerButtons, playerStart, mistake, score])
 
   return (
     <div className="relative all-buttons ">
@@ -171,7 +210,8 @@ const RoundGame = () => {
                 </div>
             </div>
             <div>
-                {mistake ? <h1 className=" text-center text-4xl my-2 font-extrabold">Wrong!</h1> : <p></p>}
+                {mistake ? <h1 className=" text-center text-2xl mb-4 font-extrabold">Wrong!</h1> : <p></p>}
+                {score === 20 ? <h1 className=" text-center text-2xl mb-4 font-extrabold">You win!</h1> : <p></p>}
             </div>
         </div>
 
